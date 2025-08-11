@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SimuladorJR - Análisis</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../src/icon.png" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans', sans-serif;
+      background: white;
+    }
+    header {
+      border-bottom: 1px solid #f0f2f5;
+      padding: 1rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h2 {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #111518;
+    }
+    nav a {
+      margin-left: 1.5rem;
+      color: #111518;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .card-custom {
+      border: 1px solid #dbe1e6;
+      border-radius: 1rem;
+      padding: 1rem;
+      background: #fff;
+    }
+    .traffic-animation-container {
+      margin-top: 30px;
+      text-align: center;
+    }
+    canvas#trafficAnimation {
+      background: #f9fafb;
+      border-radius: 1rem;
+      max-width: 480px;
+      margin: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="d-flex align-items-center gap-3">
+      <img src="../src/icon2.svg" alt="Logo" width="40" height="40" />
+      <h2>SimuladorJR</h2>
+    </div>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="simsettings.html">Simulación</a>
+      <a href="result.html">Análisis</a>
+      <a href="#" id="ayuda-link">Ayuda</a>
+    </nav>
+  </header>
+
+  <main class="container my-5" style="max-width: 900px;">
+    <h1 class="fw-bold mb-3" style="color:#111518;">Resultados de la Simulación</h1>
+    <p class="text-secondary mb-4">Análisis avanzado del tráfico basado en la configuración ingresada.</p>
+
+    <div class="row g-4">
+      <div class="col-md-4 card-custom">
+        <p class="fw-semibold mb-1 text-dark">Nivel Promedio de Congestión</p>
+        <p id="congestionLevel" class="display-6 fw-bold text-primary">Cargando...</p>
+      </div>
+      <div class="col-md-4 card-custom">
+        <p class="fw-semibold mb-1 text-dark">Tiempo Total de Retraso</p>
+        <p id="totalDelay" class="display-6 fw-bold text-primary">Cargando...</p>
+      </div>
+      <div class="col-md-4 card-custom">
+        <p class="fw-semibold mb-1 text-dark">Eficiencia de Flujo (%)</p>
+        <p id="flowEfficiency" class="display-6 fw-bold text-primary">Cargando...</p>
+      </div>
+    </div>
+
+    <h2 class="mt-5 mb-3 fw-bold" style="color:#111518;">Gráficos</h2>
+
+    <h3 class="fw-semibold mb-2" style="color:#111518;">Flujo Vehicular por Hora</h3>
+    <canvas id="flowChart" height="120"></canvas>
+
+    <h3 class="fw-semibold mt-4 mb-2" style="color:#111518;">Tiempo Promedio de Espera</h3>
+    <canvas id="waitChart" height="120" class="mt-2"></canvas>
+
+    <div class="traffic-animation-container">
+      <h3 class="fw-bold mt-5 mb-3" style="color:#111518;">Animación de tráfico</h3>
+      <canvas id="trafficAnimation" width="480" height="180"></canvas>
+    </div>
+  </main>
+
+  <script src="trafficAnimation.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('ayuda-link').addEventListener('click', e => {
+      e.preventDefault();
+      const modalContent = document.createElement('div');
+      modalContent.classList.add('modal', 'fade');
+      modalContent.innerHTML = `
+        <div class="modal-dialog">
+          <div class="modal-content p-4">
+            <h5 class="modal-title mb-3">Ayuda</h5>
+            <button class="btn btn-outline-primary mb-2 w-100" onclick="window.location.href='impact.html'">Impacto</button>
+            <button class="btn btn-outline-primary mb-3 w-100" onclick="window.location.href='marco.html'">Marco Referencial</button>
+            <button class="btn btn-outline-primary mb-3 w-100" onclick="window.location.href='help.html'">Variables</button>
+            <button type="button" class="btn btn-link" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>`;
+      document.body.appendChild(modalContent);
+      const modal = new bootstrap.Modal(modalContent);
+      modal.show();
+      modalContent.addEventListener('hidden.bs.modal', () => {
+        modalContent.remove();
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const simDataRaw = localStorage.getItem('simData');
+      if (!simDataRaw) {
+        alert('No se encontró configuración de simulación. Redirigiendo...');
+        window.location.href = 'simsettings.html';
+        return;
+      }
+
+      const simData = JSON.parse(simDataRaw);
+
+      // Validar y convertir a números
+      const verde = Number(simData.verde) || 30;
+      const amarillo = Number(simData.amarillo) || 5;
+      const rojo = Number(simData.rojo) || 60;
+      const densidad = Number(simData.densidad) || 50;
+      const velocidad = Number(simData.velocidad) || 40;
+      const carriles = Number(simData.carriles) || 2;
+      const interseccion = simData.interseccion || 't';
+
+      // Cálculos más avanzados:
+      const ciclo = verde + amarillo + rojo;
+
+      const capacidadPorCarril = velocidad * 0.5; // coeficiente arbitrario para capacidad
+      const capacidadTotal = capacidadPorCarril * carriles;
+
+      const congestionRatio = densidad / capacidadTotal;
+
+      let congestionText = 'Bajo';
+      if (congestionRatio > 1.2) congestionText = 'Muy Alto';
+      else if (congestionRatio > 1) congestionText = 'Alto';
+      else if (congestionRatio > 0.7) congestionText = 'Medio';
+
+      const totalDelay = Math.round((congestionRatio * rojo * densidad) / 60);
+
+      let flowEfficiency = Math.max(0, Math.min(100, 100 - congestionRatio * 90));
+
+      const waitAvg = ciclo * congestionRatio;
+
+      document.getElementById('congestionLevel').textContent = congestionText;
+      document.getElementById('totalDelay').textContent = `${totalDelay} minutos`;
+      document.getElementById('flowEfficiency').textContent = `${flowEfficiency.toFixed(1)}%`;
+
+      // Datos para gráficos
+      const flowData = Array.from({ length: 12 }, (_, i) =>
+        Math.max(0, capacidadTotal - (Math.sin(i / 2) * 20 + 30) * congestionRatio * 10)
+      );
+
+      const waitData = Array.from({ length: 12 }, (_, i) =>
+        Math.max(0, waitAvg + Math.cos(i / 3) * 5)
+      );
+
+      // Crear gráficos
+      const ctxFlow = document.getElementById('flowChart').getContext('2d');
+      const ctxWait = document.getElementById('waitChart').getContext('2d');
+
+      if (window.flowChartInstance) window.flowChartInstance.destroy();
+      if (window.waitChartInstance) window.waitChartInstance.destroy();
+
+      window.flowChartInstance = new Chart(ctxFlow, {
+        type: 'line',
+        data: {
+          labels: Array.from({ length: 12 }, (_, i) => `${8 + i}:00`),
+          datasets: [{
+            label: 'Flujo Vehicular (veh/h)',
+            data: flowData,
+            borderColor: 'rgba(11, 128, 238, 1)',
+            backgroundColor: 'rgba(11, 128, 238, 0.2)',
+            tension: 0.3,
+            fill: true,
+            pointRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+
+      window.waitChartInstance = new Chart(ctxWait, {
+        type: 'bar',
+        data: {
+          labels: Array.from({ length: 12 }, (_, i) => `${8 + i}:00`),
+          datasets: [{
+            label: 'Tiempo Promedio Espera (segundos)',
+            data: waitData,
+            backgroundColor: 'rgba(79, 70, 229, 0.8)'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+
+      // Iniciar animación tráfico según tipo de intersección
+      if (typeof initTrafficAnimation === 'function') {
+        initTrafficAnimation(interseccion, { verde, amarillo, rojo });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <link rel="icon" type="image/png" sizes="16x16" href="../src/icon.png" />
+    <title>Simulador JR</title>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f2f5] px-10 py-3">
+          <div class="flex items-center gap-4 text-[#111518]">
+            <div class="size-4">
+              <img src="../src/icon2.svg" alt="Logo" class="w-full h-full" />
+            </div>
+            <h2 class="text-[#111518] text-lg font-bold leading-tight tracking-[-0.015em]">SimuladorJR</h2>
+          </div>
+          <div class="flex flex-1 justify-end gap-8">
+            <div class="flex items-center gap-9">
+              <a class="text-[#111518] text-sm font-medium leading-normal" href="index.html">Inicio</a>
+              <a class="text-[#111518] text-sm font-medium leading-normal" href="simsettings.html">Simulación</a>
+              <a class="text-[#111518] text-sm font-medium leading-normal" href="result.html">Análisis</a>
+              <a class="text-[#111518] text-sm font-medium leading-normal" href="#" id="ayuda-link">Ayuda</a>
+            </div>
+          </div>
+        </header>
+
+        <!-- ModalWindows for help -->
+        <div id="modal-ayuda" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+          <div class="bg-white rounded-lg shadow-lg p-8 w-[350px] flex flex-col gap-4">
+            <h3 class="text-lg font-bold mb-2">Ayuda</h3>
+            <div class="flex flex-col gap-2">
+              <button
+                class="bg-[#f0f2f5] rounded px-4 py-2 font-medium text-[#111518]"
+                onclick="window.location.href='impact.html'"
+              >Impacto</button>
+              <button
+                class="bg-[#f0f2f5] rounded px-4 py-2 font-medium text-[#111518]"
+                onclick="window.location.href='marco.html'"
+              >Marco Referencial</button>
+              <button
+                class="bg-[#f0f2f5] rounded px-4 py-2 font-medium text-[#111518]"
+                onclick="window.location.href='help.html'"
+              >Variables</button>
+            </div>
+            <button id="cerrar-modal-ayuda" class="mt-4 text-sm text-[#4F46E5] font-bold">Cerrar</button>
+          </div>
+        </div>
+
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div class="flex flex-wrap justify-between gap-3 p-4">
+              <p class="text-[#111518] tracking-light text-[32px] font-bold leading-tight min-w-72">Análisis de Resultados de la Simulación</p>
+            </div>
+
+            <p class="text-[#111518] text-base font-normal leading-normal pb-3 pt-1 px-4">
+              El SimuladorJR es una herramienta diseñada para mejorar la comprensión y gestión del tráfico vehicular en áreas urbanas. Permite visualizar cómo diferentes configuraciones semafóricas y condiciones de tráfico pueden afectar la fluidez vehicular, los tiempos de espera y la congestión. Su uso facilita la toma de decisiones informadas para optimizar la movilidad urbana, reducir la contaminación ambiental y mejorar la calidad de vida de los ciudadanos.
+            </p>
+
+            <h3 class="text-[#111518] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Aspectos Destacados</h3>
+
+            <div class="flex flex-col gap-3 px-4">
+              <div class="bg-[#f0f2f5] rounded-lg p-4">
+                <p class="text-[#111518] text-base font-semibold">Optimización de Tiempos</p>
+                <p class="text-[#60768a] text-sm">El simulador ayuda a identificar ajustes en los ciclos de semáforo que pueden mejorar la eficiencia y disminuir los tiempos de espera.</p>
+              </div>
+
+              <div class="bg-[#f0f2f5] rounded-lg p-4">
+                <p class="text-[#111518] text-base font-semibold">Gestión del Flujo Vehicular</p>
+                <p class="text-[#60768a] text-sm">Permite analizar cómo el volumen de vehículos impacta en la congestión y cómo diferentes estrategias pueden mitigarlo.</p>
+              </div>
+
+              <div class="bg-[#f0f2f2] rounded-lg p-4">
+                <p class="text-[#111518] text-base font-semibold">Soporte para la Toma de Decisiones</p>
+                <p class="text-[#60768a] text-sm">Ofrece una base para que planificadores urbanos y autoridades puedan diseñar intervenciones más efectivas en el tránsito.</p>
+              </div>
+            </div>
+
+            <h3 class="text-[#111518] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-6">Visualización de la Simulación</h3>
+
+            <p class="text-[#111518] text-base font-normal leading-normal pb-3 pt-1 px-4">
+              Los gráficos a continuación muestran la evolución general del tráfico y el comportamiento esperado en diferentes escenarios simulados.
+            </p>
+
+            <div class="flex flex-col md:flex-row gap-6 px-4">
+              <canvas id="grafico-flujo" class="flex-1 rounded-lg border border-gray-200 bg-white" style="height: 300px;"></canvas>
+              <canvas id="grafico-espera" class="flex-1 rounded-lg border border-gray-200 bg-white" style="height: 300px;"></canvas>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+              // Datos genéricos para ilustración
+              const tiempos = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+              const flujoVehiculos = [20, 35, 50, 65, 70, 60, 55, 45, 30, 20, 10];
+              const tiempoEspera = [40, 38, 35, 30, 25, 22, 20, 18, 15, 12, 10];
+
+              // Gráfico flujo vehicular
+              const ctxFlujo = document.getElementById('grafico-flujo').getContext('2d');
+              new Chart(ctxFlujo, {
+                type: 'line',
+                data: {
+                  labels: tiempos,
+                  datasets: [{
+                    label: 'Vehículos por minuto (estimado)',
+                    data: flujoVehiculos,
+                    borderColor: '#4F46E5',
+                    backgroundColor: 'rgba(79,70,229,0.2)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  plugins: {
+                    legend: { display: true },
+                    tooltip: { enabled: true }
+                  },
+                  scales: {
+                    y: { beginAtZero: true, max: 100 }
+                  }
+                }
+              });
+
+              // Gráfico tiempo promedio de espera
+              const ctxEspera = document.getElementById('grafico-espera').getContext('2d');
+              new Chart(ctxEspera, {
+                type: 'bar',
+                data: {
+                  labels: tiempos,
+                  datasets: [{
+                    label: 'Tiempo promedio de espera (s) (estimado)',
+                    data: tiempoEspera,
+                    backgroundColor: '#4F46E5'
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  plugins: {
+                    legend: { display: true },
+                    tooltip: { enabled: true }
+                  },
+                  scales: {
+                    y: { beginAtZero: true, max: 50 }
+                  }
+                }
+              });
+            </script>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Mostrar modal al hacer clic en Ayuda
+      document.getElementById('ayuda-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('modal-ayuda').classList.remove('hidden');
+      });
+      // Cerrar modal
+      document.getElementById('cerrar-modal-ayuda').addEventListener('click', function() {
+        document.getElementById('modal-ayuda').classList.add('hidden');
+      });
+    </script>
+  </body>
+</html>

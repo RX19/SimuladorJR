@@ -1,0 +1,121 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <link rel="icon" type="image/png" sizes="16x16" href="../src/icon.png" />
+    <title>Simulador JR</title>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f2f5] px-10 py-3">
+          <div class="flex items-center gap-4 text-[#111518]">
+            <div class="size-4">
+              <img src="../src/icon2.svg" alt="Logo" class="w-full h-full" />
+            </div>
+            <h2 class="text-[#111518] text-lg font-bold leading-tight tracking-[-0.015em]">SimuladorJR</h2>
+          </div>
+          <div class="flex flex-1 justify-end gap-8">
+            <div class="flex items-center gap-9">
+              <a class="text-[#111518] text-sm font-medium leading-normal" href="index.html">Inicio</a>
+              <a class="text-[#111518] text-sm font-medium leading-normal" href="simsettings.html">Simulación</a>
+              <a class="text-[#111518] text-sm font-medium leading-normal" href="result.html">Análisis</a>
+              <a class="text-[#111518] text-sm font-medium leading-normal" href="#" id="ayuda-link">Ayuda</a>
+            </div>
+          </div>
+        </header>
+        <!-- ModalWindows for help -->
+        <div id="modal-ayuda" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+          <div class="bg-white rounded-lg shadow-lg p-8 w-[350px] flex flex-col gap-4">
+            <h3 class="text-lg font-bold mb-2">Ayuda</h3>
+            <div class="flex flex-col gap-2">
+              <button
+                class="bg-[#f0f2f5] rounded px-4 py-2 font-medium text-[#111518]"
+                onclick="window.location.href='impact.html'"
+              >Impacto</button>
+              <button
+                class="bg-[#f0f2f5] rounded px-4 py-2 font-medium text-[#111518]"
+                onclick="window.location.href='marco.html'"
+              >Marco Referencial</button>
+              <button
+                class="bg-[#f0f2f5] rounded px-4 py-2 font-medium text-[#111518]"
+                onclick="window.location.href='help.html'"
+              >Variables</button>
+            </div>
+            <button id="cerrar-modal-ayuda" class="mt-4 text-sm text-[#4F46E5] font-bold">Cerrar</button>
+          </div>
+        </div>
+
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div class="flex flex-wrap justify-between gap-3 p-4">
+              <p class="text-[#111518] tracking-light text-[32px] font-bold leading-tight min-w-72">Marco Referencial</p>
+            </div>
+
+            <h2 class="text-[#111518] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Modelos de Tráfico</h2>
+            <p class="text-[#111518] text-base font-normal leading-normal pb-3 pt-1 px-4">
+              Utilizamos modelos híbridos de tráfico que combinan enfoques macroscópicos y microscópicos para representar el comportamiento de los vehículos en una intersección urbana.
+              <br />
+              <strong>Modelos macroscópicos:</strong> Consideran el tráfico como un flujo continuo similar a un fluido, permitiendo analizar variables como densidad, velocidad promedio y flujo vehicular total.
+              <br />
+              <strong>Modelos microscópicos:</strong> Modelan el comportamiento individual de cada vehículo, incluyendo aceleración, deceleración y reacción a señales semafóricas y otros vehículos.
+            </p>
+
+            <h2 class="text-[#111518] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Principios Teóricos Aplicados</h2>
+            <p class="text-[#111518] text-base font-normal leading-normal pb-3 pt-1 px-4">
+              Para construir la simulación, se aplicaron diversos principios teóricos fundamentales:
+            </p>
+            <ul class="list-disc list-inside text-[#111518] px-10 pb-3">
+              <li><strong>Teoría de colas:</strong> Modela la formación y disipación de filas de vehículos en intersecciones y semáforos, permitiendo calcular tiempos de espera y capacidad de servicio.</li>
+              <li><strong>Teoría de grafos:</strong> Representa la red vial y las rutas posibles, optimizando el flujo y la elección de caminos para minimizar congestiones.</li>
+              <li><strong>Optimización de señales semafóricas:</strong> Se utiliza para ajustar los ciclos de luz verde, amarilla y roja, buscando minimizar el tiempo total de espera y mejorar el flujo vehicular.</li>
+              <li><strong>Simulación por eventos discretos:</strong> La dinámica del tráfico se modela mediante eventos que ocurren en tiempos específicos, como cambios de semáforo o llegada de vehículos, para reflejar un comportamiento realista.</li>
+              <li><strong>Modelos estadísticos y probabilísticos:</strong> Para representar la variabilidad del comportamiento humano al volante y la llegada aleatoria de vehículos, mejorando la precisión del modelo.</li>
+            </ul>
+
+            <h2 class="text-[#111518] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Fundamentos de la Implementación</h2>
+            <p class="text-[#111518] text-base font-normal leading-normal pb-3 pt-1 px-4">
+              El simulador está construido usando tecnologías web modernas y librerías gráficas para representar los resultados visualmente y con animaciones:
+            </p>
+            <ul class="list-disc list-inside text-[#111518] px-10 pb-3">
+              <li><strong>JavaScript y Canvas:</strong> Para la representación dinámica y animada de los vehículos y el semáforo, permitiendo mostrar pausas y avances según los tiempos de los semáforos.</li>
+              <li><strong>Chart.js:</strong> Para la visualización gráfica de datos estadísticos como tiempo promedio de espera y flujo vehicular, facilitando el análisis visual.</li>
+              <li><strong>LocalStorage:</strong> Para almacenar y recuperar configuraciones y resultados de simulaciones, permitiendo una experiencia continua sin necesidad de backend.</li>
+              <li><strong>Tailwind CSS:</strong> Para la estructura y diseño responsivo de la interfaz, asegurando una experiencia visual limpia y consistente.</li>
+            </ul>
+
+            <h2 class="text-[#111518] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Aplicación Práctica</h2>
+            <p class="text-[#111518] text-base font-normal leading-normal pb-3 pt-1 px-4">
+              Gracias a estos modelos y principios se puede:
+            </p>
+            <ul class="list-disc list-inside text-[#111518] px-10 pb-3">
+              <li>Predecir los tiempos promedio de espera y congestión en distintos tipos de intersección.</li>
+              <li>Visualizar el impacto de cambios en la duración de los semáforos sobre el flujo vehicular.</li>
+              <li>Ofrecer una herramienta para que urbanistas y autoridades puedan evaluar y optimizar el diseño vial y las configuraciones semafóricas.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Mostrar modal al hacer clic en Ayuda
+      document.getElementById('ayuda-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('modal-ayuda').classList.remove('hidden');
+      });
+      // Cerrar modal
+      document.getElementById('cerrar-modal-ayuda').addEventListener('click', function() {
+        document.getElementById('modal-ayuda').classList.add('hidden');
+      });
+    </script>
+  </body>
+</html>

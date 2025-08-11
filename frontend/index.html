@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+    <link rel="icon" type="image/png" sizes="16x16" href="../src/icon.png" />
+    <title>Simulador JR</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f2f5] px-10 py-3">
+          <div class="flex items-center gap-4 text-[#111518]">
+            <div class="size-4">
+              <img src="../src/icon2.svg" alt="Logo" class="w-full h-full" />
+            </div>
+            <h2 class="text-[#111518] text-lg font-bold leading-tight tracking-[-0.015em]">SimuladorJR</h2>
+          </div>
+          <div class="flex flex-1 justify-end gap-8">
+            <div class="flex items-center gap-9">
+              <a class="text-[#111518] text-sm font-medium leading-normal" href="index.html">Inicio</a>
+              <a class="text-[#111518] text-sm font-medium leading-normal" href="simsettings.html">Simulación</a>
+              <a class="text-[#111518] text-sm font-medium leading-normal" href="result.html">Análisis</a>
+              <a class="text-[#111518] text-sm font-medium leading-normal" href="#" id="ayuda-link">Ayuda</a>
+            </div>
+          </div>
+        </header>
+        <!-- ModalWindows for help -->
+        <div id="modal-ayuda" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+          <div class="bg-white rounded-lg shadow-lg p-8 w-[350px] flex flex-col gap-4">
+            <h3 class="text-lg font-bold mb-2">Ayuda</h3>
+            <div class="flex flex-col gap-2">
+              <button
+                class="bg-[#f0f2f5] rounded px-4 py-2 font-medium text-[#111518]"
+                onclick="window.location.href='impact.html'"
+              >Impacto</button>
+              <button
+                class="bg-[#f0f2f5] rounded px-4 py-2 font-medium text-[#111518]"
+                onclick="window.location.href='marco.html'"
+              >Marco Referencial</button>
+              <button
+                class="bg-[#f0f2f5] rounded px-4 py-2 font-medium text-[#111518]"
+                onclick="window.location.href='help.html'"
+              >Variables</button>
+            </div>
+            <button id="cerrar-modal-ayuda" class="mt-4 text-sm text-[#4F46E5] font-bold">Cerrar</button>
+          </div>
+        </div>
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <h1 class="text-[#111518] tracking-light text-[32px] font-bold leading-tight px-4 text-center pb-3 pt-6">Simulación de Tráfico Urbano</h1>
+            <p class="text-[#111518] text-base font-normal leading-normal pb-3 pt-1 px-4 text-center">
+              Visualiza y analiza el flujo de tráfico en entornos urbanos simulados. Optimiza las señales de tráfico y la infraestructura para reducir la congestión y mejorar la
+              eficiencia del transporte.
+            </p>
+          </div>
+        </div>
+        <main
+          class="flex flex-1 justify-center items-center"
+          style="min-height: calc(100vh - 72px);"
+        >
+          <button
+            onclick="window.location.href='simsettings.html'"
+            class="px-10 py-4 bg-blue-600 text-white rounded-lg text-xl font-semibold hover:bg-blue-700 transition"
+          >
+            Iniciar
+          </button>
+        </main>
+      </div>
+    </div>
+    <script>
+      // Mostrar modal al hacer clic en Ayuda
+      document.getElementById('ayuda-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('modal-ayuda').classList.remove('hidden');
+      });
+      // Cerrar modal
+      document.getElementById('cerrar-modal-ayuda').addEventListener('click', function() {
+        document.getElementById('modal-ayuda').classList.add('hidden');
+      });
+    </script>
+  </body>
+</html>
