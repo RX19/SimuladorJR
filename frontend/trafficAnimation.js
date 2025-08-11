@@ -1,9 +1,3 @@
-// trafficAnimation.js
-// Animación con autos que se detienen/avanzan según semáforo y sus tiempos (verde, amarillo, rojo)
-
-// Parámetros que vienen de result.html al llamar initTrafficAnimation
-// type: tipo de intersección ('t', 'cruce', 'y', 'rotonda')
-// simData = {verde, amarillo, rojo, ...} con tiempos en segundos
 
 function initTrafficAnimation(type, simData) {
   const canvas = document.getElementById('trafficAnimation');
@@ -12,17 +6,14 @@ function initTrafficAnimation(type, simData) {
   const W = canvas.width;
   const H = canvas.height;
 
-  // Desestructuramos los tiempos de semáforo y convertimos a milisegundos
   const verdeDur = (simData?.verde ?? 30) * 1000;
   const amarilloDur = (simData?.amarillo ?? 5) * 1000;
   const rojoDur = (simData?.rojo ?? 60) * 1000;
 
-  // Ciclo completo del semáforo
   const cicloDur = verdeDur + amarilloDur + rojoDur;
 
   ctx.clearRect(0, 0, W, H);
 
-  // Variables autos y semáforo
   const carWidth = 30;
   const carHeight = 15;
   const speedBase = 1.5;
@@ -31,8 +22,6 @@ function initTrafficAnimation(type, simData) {
   let cars = [];
   let startTime = null;
 
-  // Define zonas de parada antes de la intersección (x o y según dirección)
-  // Aproximado, para que autos no pasen en rojo
   const stopZones = {
     right: W / 2 - 80,
     left: W / 2 + 50,
